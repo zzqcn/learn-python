@@ -9,12 +9,12 @@
 
 默认情况下，Python 源码文件的编码是 UTF-8。
 
-如果不使用默认编码，则要声明文件的编码，文件的 第一 行要写成特殊注释。句法如下：
+如果不使用默认编码，则要声明文件的编码，文件的第一行要写成特殊注释。句法如下：
 ```
 # -*- coding: encoding -*-
 ```
 
-第一行 的规则也有一种例外情况，源码以 UNIX "shebang" 行 开头。此时，编码声明要写在文件的第二行。例如：
+第一行的规则也有一种例外情况，源码以 UNIX "shebang" 行开头。此时，编码声明要写在文件的第二行。例如：
 
 ```
 #!/usr/bin/env python3
@@ -27,6 +27,16 @@
 ## 3.1 Python 用作计算器
 
 ### 3.1.1 数字
+
+除法运算 (/) 总是返回浮点数。如果要做 floor division 得到一个整数结果你可以使用 `//` 运算符；要计算余数你可以使用 `%`:
+```python
+>>> 17 / 3  # 经典除法运算返回一个浮点数
+5.666666666666667
+>>> 17 // 3  # 向下取整除法运算会丢弃小数部分
+5
+>>>17 % 3  # % 运算返回相除的余数
+2
+```
 
 计算乘方的运算符是 `**`, 如:
 ```python
@@ -57,13 +67,13 @@ First line.
 Second line.
 ```
 
-如果不希望前置 `\` 的字符转义成特殊字符，可以使用 原始字符串，在引号前添加 `r` 即可：
+如果不希望前置 `\` 的字符转义成特殊字符，可以使用*原始字符串*，在引号前添加 `r` 即可：
 ```python
->>> print('C:\some\name')  # 这里 \n 表示换行符！
-C:\some
+>>> print('C:\this\name')  # 这里 \t 表示制表符，\n 表示换行符
+C:      his
 ame
->>> print(r'C:\some\name')  # 请注意引号前的 r
-C:\some\name
+>>> print(r'C:\this\name')  # 请注意引号前的 r
+C:\this\name
 ```
 
 字符串字面值可以跨越多行。 一种做法是使用三重引号: `"""..."""` 或 `'''...'''`。 行结束符会自动包括在字符串中，
@@ -114,7 +124,7 @@ SyntaxError: invalid syntax
 'Python'
 ```
 
-字符串支持 索引 （下标访问），第一个字符的索引是 0。索引还支持负数，用负数索引时，从右边开始计数：
+字符串支持 索引（下标访问），第一个字符的索引是 0。索引还支持负数，用负数索引时，从右边开始计数：
 ```python
 >>> word = 'Python'
 word[-1]  # 最后一个字符
@@ -153,7 +163,7 @@ word[-1]  # 最后一个字符
 'Python'
 ```
 
-还可以这样理解切片，索引指向的是字符之间 ，第一个字符的左侧标为 0，最后一个字符的右侧标为 n ，
+还可以这样理解切片，索引指向的是字符*之间*，第一个字符的左侧标为 0，最后一个字符的右侧标为 n ，
 n 是字符串长度。例如：
 ```
  +---+---+---+---+---+---+
@@ -180,9 +190,22 @@ TypeError: 'str' object does not support item assignment
 
 要生成不同的字符串，应新建一个字符串.
 
+另外参考:
+* [文本序列类型 --- str](https://docs.python.org/zh-cn/3.15/builtins/stdtypes.html#textseq)  
+  字符串是 序列类型 ，支持序列类型的各种操作。
+* [字符串的方法](https://docs.python.org/zh-cn/3.15/builtins/stdtypes.html#string-methods)  
+  字符串支持很多变形与查找方法。
+* [f-字符串](https://docs.python.org/zh-cn/3.15/reference/lexical_analysis.html#f-strings)  
+  内嵌表达式的字符串字面值。
+* [格式字符串语法](https://docs.python.org/zh-cn/3.15/library/string.html#formatstrings)  
+  使用 str.format() 格式化字符串。
+* [printf 风格的字符串格式化](https://docs.python.org/zh-cn/3.15/builtins/stdtypes.html#old-string-formatting)  
+  这里详述了用 `%` 运算符格式化字符串的操作。
+
+
 ### 3.1.3 列表
 
-与 immutable 字符串不同, 列表是 mutable 类型，其内容可以改变：
+与 *immutable* 字符串不同, 列表是 *mutable* 类型，其内容可以改变：
 ```python
 >>> cubes = [1, 8, 27, 65, 125]  # 这里有点问题
 >>> 4 ** 3  # 4 的立方是 64，不是 65！
@@ -192,7 +215,7 @@ TypeError: 'str' object does not support item assignment
 [1, 8, 27, 64, 125]
 ```
 
-Python 中的简单赋值绝不会复制数据。 当你将一个列表赋值给一个变量时，该变量将引用*现有的列表*。
+Python 中的简单赋值**绝不会复制数据**。 当你将一个列表赋值给一个变量时，该变量将引用*现有的列表*。
 你通过一个变量对列表所做的任何更改都会被引用它的所有其他变量看到。
 ```python
 >>> rgb = ["Red", "Green", "Blue"]
@@ -239,7 +262,7 @@ pass 还可用作函数或条件语句体的占位符，让你保持在更抽象
         pass   # 记得实现这个！
 ```
 
-对于这后一种情况，许多人会使用省略符字面值 ... 而不是 pass。 这种用法在 Python 中没有特殊含义，
+对于这后一种情况，许多人会使用省略符字面值 `...` 而不是 pass。 这种用法在 Python 中没有特殊含义，
 也不是语言定义的一部分（这里你可以使用任意常量表达式），但 ... 在传统上也被用作占位符号。
 
 ## 4.7 match 语句
@@ -263,7 +286,7 @@ def http_error(status):
             return "Something's wrong with the internet"
 ```
 
-注意最后一个代码块：变量名 `_` 被作为 通配符 并必定会匹配成功。
+注意最后一个代码块：变量名 `_` 被作为*通配符*并必定会匹配成功。
 
 你可以用 `|` (或)将多个字面值组合到一个模式中：
 ```python
@@ -278,7 +301,7 @@ case 401 | 403 | 404:
 
 ### 4.9.2 关键字参数
 
-当存在形式为 `**name` 最后一个形参时，它将接受一个字典 (见 映射类型 --- dict)，其中包含与正式形参
+当存在形式为 `**name` 最后一个形参时，它将接受一个字典 (见 [映射类型 --- dict, frozendict](https://docs.python.org/zh-cn/3.15/builtins/stdtypes.html#typesmapping))，其中包含与正式形参
 对应的参数以外的所有关键字参数。 它可以与接受包含正式形参列表以外的位置参数的 tuple 的 `*name` 形式的
 正式形参组合使用。 (`*name` 必须出现在 `**name` 之前。) 例如，如果我们定义一个这样的函数:
 ```python
@@ -416,12 +439,12 @@ Arguments: spam eggs
 
 ## 4.10 小插曲: 编码风格
 
-现在你即将编写更长、更复杂的 Python 代码段，是时候讨论一下代码风格了。 大多数语言都能被书写为
+现在你即将编写更长、更复杂的 Python 代码段，是时候讨论一下*代码风格*了。 大多数语言都能被书写为
 （或更准确地说，是被格式化为）不同的风格；有些风格相比其他风格可读性更好。 能让别人轻松阅读你的代码
 总是一个好主意，而采用一种良好的代码风格对此会很有帮助。
 
-Python 项目大多都遵循 PEP 8 的风格指南；它推行的编码风格易于阅读、赏心悦目。Python 开发者均应
-抽时间悉心研读；以下是该提案中的核心要点：
+Python 项目大多都遵循 [PEP 8](https://peps.python.org/pep-0008/) 的风格指南；它推行的编码风格易于阅读、
+赏心悦目。Python 开发者均应抽时间悉心研读；以下是该提案中的核心要点：
 
 - 缩进，用 `4` 个空格，不要用制表符。    
   4 个空格是小缩进（更深嵌套）和大缩进（更易阅读）之间的折中方案。制表符会引起混乱，最好别用。
@@ -432,7 +455,7 @@ Python 项目大多都遵循 PEP 8 的风格指南；它推行的编码风格易
 - 使用文档字符串。
 - 运算符前后、逗号后要用空格，但不要直接在括号内使用： `a = f(1, 2) + g(3, 4)`。
 - 类和函数的命名要一致；按惯例，命名类用 `UpperCamelCase`，命名函数与方法用 `lowercase_with_underscores`。
-  命名方法中第一个参数总是用 `self` (类和方法详见 初探类)。
+  命名方法中第一个参数总是用 `self` (类和方法详见 [初探类](https://docs.python.org/zh-cn/3.15/tutorial/classes.html#tut-firstclasses))。
 - 编写用于国际多语环境的代码时，不要用生僻的编码。Python 默认的 UTF-8 或纯 ASCII 可以胜任各种情况。
 - 同理，就算多语阅读、维护代码的可能再小，也不要在标识符中使用非 ASCII 字符。
 
@@ -443,10 +466,13 @@ Python 项目大多都遵循 PEP 8 的风格指南；它推行的编码风格易
 
 列表即 `list`.
 
+> list 的内部实现是动态数组.
+
 ### 5.1.2 用列表实现队列
 
-列表也可以用作队列，最先加入的元素，最先取出（“先进先出”）；然而，列表作为队列的效率很低。
-因为，在列表末尾添加和删除元素非常快，但在列表开头插入或移除元素却很慢（因为所有其他元素都必须移动一位）。
+列表也可当作队列来使用，首先添加的元素将被首先提取（“先进先出”）；不过，列表这样使用是低效的。 
+虽然在列表末尾添加和弹出条目很快速，但在列表开头插入或弹出条目却很慢（因为所有其他元素都必须移动一位）。 
+详情参见 [内置类型操作的时间复杂度](https://docs.python.org/zh-cn/3.15/builtins/time-complexity.html#time-complexity)。
 
 实现队列最好用 `collections.deque`，可以快速从两端添加或删除元素。
 
@@ -487,16 +513,16 @@ del 也可以用来删除整个变量：
 12345
 >>> t
 (12345, 54321, 'hello!')
->>> # Tuples may be nested:
+>>> # 元组可以嵌套:
 >>> u = t, (1, 2, 3, 4, 5)
 >>> u
 ((12345, 54321, 'hello!'), (1, 2, 3, 4, 5))
->>> # Tuples are immutable:
+>>> # 元组是不可变对象:
 >>> t[0] = 88888
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: 'tuple' object does not support item assignment
->>> # but they can contain mutable objects:
+>>> # 但它们可以包含可变对象:
 >>> v = ([1, 2, 3], [3, 2, 1])
 >>> v
 ([1, 2, 3], [3, 2, 1])
@@ -563,7 +589,7 @@ Python 在两种情况下不检查缓存:
 `-OO` 去除断言语句和 `__doc__` 字符串。有些程序可能依赖于这些内容，因此，没有十足的把握，
 不要使用这两个选项。“优化过的”模块带有 `opt-` 标签，并且文件通常会一小些。将来的发行版或许会改进优化的效果。
 - 从 `.pyc` 文件读取的程序不比从 `.py` 读取的执行速度快，`.pyc` 文件只是加载速度更快。
-- `compileall` 模块可以为一个目录下的所有模块创建 .pyc 文件。
+- [`compileall`](https://docs.python.org/zh-cn/3.15/library/compileall.html#module-compileall) 模块可以为一个目录下的所有模块创建 .pyc 文件。
 - 本过程的细节及决策流程图，详见 [PEP 3147](https://peps.python.org/pep-3147/)。
 
 ## 6.4 包
@@ -617,20 +643,18 @@ sound/                          最高层级的包
 `sound.effects.echo.echofilter(input, output, delay=0.7, atten=4)`
 
 另一种导入子模块的方法是 ：
-`from sound.effects import echo`
-
+`from sound.effects import echo`  
 这也会加载子模块 echo，并使其不必加包前缀，因此可按如下方式使用:
 `echo.echofilter(input, output, delay=0.7, atten=4)`
 
 Import 语句的另一种变体是直接导入所需的函数或变量：
-`from sound.effects.echo import echofilter`
-
+`from sound.effects.echo import echofilter`  
 同样，这将加载子模块 echo，但这使其函数 echofilter() 直接可用:
 `echofilter(input, output, delay=0.7, atten=4)`
 
 注意，使用 `from package import item` 时，item 可以是包的子模块（或子包），也可以是包中定义的函数、
 类或变量等其他名称。`import` 语句首先测试包中是否定义了 item；如果未在包中定义，则假定 item 是模块，
-并尝试加载。如果找不到 item，则触发 `ImportError` 异常。
+并尝试加载。如果找不到 item，则触发 ImportError 异常。
 
 相反，使用 `import item.subitem.subsubitem` 句法时，除最后一项外，每个 item 都必须是包；
 最后一项可以是模块或包，但不能是上一项中定义的类、函数或变量。
@@ -642,7 +666,7 @@ Import 语句的另一种变体是直接导入所需的函数或变量：
 
 格式化输出包括以下几种方法:
 
-- 使用格式化字符串字面值
+- 使用[格式化字符串字面值](https://docs.python.org/zh-cn/3.15/tutorial/inputoutput.html#tut-f-strings)
 
   需要在字符串开头的引号/三引号前添加 `f` 或 `F`. 在这种字符串中，可以在 `{` 和 `}` 
   字符之间输入引用的变量，或字面值的 Python 表达式。
@@ -656,7 +680,7 @@ Import 语句的另一种变体是直接导入所需的函数或变量：
 
 - 使用 `str.format()`
 
-  你仍将使用 `{` 和 `}` 来标记变量将被替换的位置并且可以提供详细的格式化指令，
+  需要更多手动操作, 你仍将使用 `{` 和 `}` 来标记变量将被替换的位置并且可以提供详细的格式化指令，
   但你还需要提供待格式化的信息.
 
   ```python
@@ -668,20 +692,20 @@ Import 语句的另一种变体是直接导入所需的函数或变量：
   ```
 
   请注意 yes_votes 填充了空格并且只为负数添加了负号。 这个例子还打印了 percentage 乘以 100 
-  的结果，保留 2 个数位并带有一个百分号 (请参阅 [格式规格迷你语言](https://docs.python.org/zh-cn/3.12/library/string.html#formatspec) 了解详情)。
+  的结果，保留 2 个数位并带有一个百分号 (请参阅 [格式规格迷你语言](https://docs.python.org/zh-cn/3.15/library/string.html#formatspec) 了解详情)。
 
 - 最后，还可以用字符串切片和合并操作完成字符串处理操作，创建任何排版布局。
   字符串类型还支持将字符串按给定列宽进行填充，这些方法也很有用。
 
 如果不需要花哨的输出，只想快速显示变量进行调试，可以用 `repr()` 或 `str()` 函数把值转化为字符串。
 
-`str()` 函数返回供人阅读的值，`repr()` 则生成适于解释器读取的值（如果没有等效的语法，则强制执行 
+`str()` 函数返回供人阅读的值，`repr()` 则生成适于解释器读取的值（如果没有等效的语法，则强制引发 
 SyntaxError）。对于没有支持供人阅读展示结果的对象， `str()` 返回与 `repr()` 相同的值。一般情况下，数字、
 列表或字典等结构的值，使用这两个函数输出的表现形式是一样的。字符串有两种不同的表现形式。
 
 ### 7.1.1 格式化字符串字面值
 
-格式化字符串字面值 （简称为 f-字符串）在字符串前加前缀 `f` 或 `F`，通过 `{expression}` 表达式，
+[格式化字符串字面值](https://docs.python.org/zh-cn/3.15/reference/lexical_analysis.html#f-strings) （简称为 f-字符串）在字符串前加前缀 `f` 或 `F`，通过 `{expression}` 表达式，
 把 Python 表达式的值添加到字符串内。
 
 格式说明符是可选的，写在表达式后面，可以更好地控制格式化值的方式。下例将 pi 舍入到小数点后三位：
@@ -720,11 +744,11 @@ My hovercraft is full of 'eels'.
 Debugging bugs='roaches' count=13 area='living room'
 ```
 
-请参阅 [自说明型表达式](https://docs.python.org/zh-cn/3.12/whatsnew/3.8.html#bpo-36817-whatsnew) 
+请参阅 [自说明型表达式](https://docs.python.org/zh-cn/3.15/whatsnew/3.8.html#bpo-36817-whatsnew) 
 以了解 `=` 说明符的更多信息。 有关这些格式说明的详情，请查看针对 
-[格式规格迷你语言](https://docs.python.org/zh-cn/3.12/library/string.html#formatspec) 的参考指南。
+[格式规格迷你语言](https://docs.python.org/zh-cn/3.15/library/string.html#formatspec) 的参考指南。
 
-### 7.1.2 字符串 format() 方法
+### 7.1.2 字符串的 format() 方法
 
 `str.format()` 方法的基本用法如下所示：
 ```python
@@ -797,15 +821,43 @@ __name__: __main__; __doc__: None; __package__: None; __loader__: ...
 10 100 1000
 ```
 
-str.format() 进行字符串格式化的完整概述详见 [格式字符串语法](https://docs.python.org/zh-cn/3.12/library/string.html#formatstrings) 。
+str.format() 进行字符串格式化的完整概述详见 [格式字符串语法](https://docs.python.org/zh-cn/3.15/library/string.html#formatstrings) 。
 
 ## 7.2 读写文件
+
+在处理文件对象时，最好使用 `with` 关键字。优点是，子句体结束后，文件会正确关闭，即便触发异常也可以。而且，
+使用 with 相比等效的 `try-finally` 代码块要简短得多：
+
+```python
+>>> with open('workfile') as f:
+        read_data = f.read()
+
+>>> # 我们可以检测文件是否已被自动关闭。
+>>> f.closed
+True
+```
+
+如果没有使用 with 关键字，则应调用 f.close() 关闭文件，即可释放文件占用的系统资源。
+
+### 7.2.1 文件对象的方法
+
+从文件中读取多行时，可以用循环遍历整个文件对象。这种操作能高效利用内存，快速，且代码简单：
+
+```python
+>>> for line in f:
+        print(line, end='')
+
+This is the first line of the file.
+Second line of the file
+```
+
+如需以列表形式读取文件中的所有行，可以用 list(f) 或 f.readlines()。
 
 ### 7.2.2 使用 json 保存结构化数据
 
 Python 允许你使用流行的数据交换格式 JSON，而不是让用户持续编写和调试代码来将复杂的数据类型存入文件中。 
-标准库模块 `json` 可以接受带有层级结构的 Python 数据，并将其转换为字符串表示形式；这个过程称为 serializing。
-根据字符串表示形式重建数据则称为 deserializing。 在序列化和反序列化之间，用于代表对象的字符串可以存储在
+标准库模块 `json` 可以接受带有层级结构的 Python 数据，并将其转换为字符串表示形式；这个过程称为 *serializing*。
+根据字符串表示形式重建数据则称为 *deserializing*。 在序列化和反序列化之间，用于代表对象的字符串可以存储在
 文件或数据库中，或者通过网络连接发送到远端主机。
 
 备注 JSON 格式通常用于现代应用程序的数据交换。程序员早已对它耳熟能详，可谓是交互操作的不二之选。
